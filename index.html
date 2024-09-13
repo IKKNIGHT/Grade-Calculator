@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .fade-in {
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+    .fade-in.show {
+      opacity: 1;
+    }
+
+    .custom-grade-input {
+      width: 70px; /* Increased width to prevent cutting off */
+      padding: 8px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 16px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .custom-grade-input:focus {
+      border-color: #7289da; /* Border color on focus */
+      box-shadow: 0 0 5px rgba(114, 137, 218, 0.5); /* Shadow on focus */
+      outline: none; /* Remove default outline */
+    }
+
+    .custom-grade-input::placeholder {
+      color: #aaa; /* Placeholder text color */
+    }
+
+    .weightage-text {
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center; /* Center the buttons */
+      margin: 20px 0; /* Add some margin */
+    }
+
+    .final-grade-container {
+      text-align: center; /* Center the final grade text */
+      margin-top: 20px; /* Add some margin */
+    }
+  </style>
+</head>
+<body>
+  <h1>Grade Calculator</h1>
+  <table id="gradeTable" border="1">
+    <tr>
+      <th>Component</th>
+      <th>Grade</th>
+      <th>Weightage (%)</th>
+      <th>Weighted Grade</th>
+      <th>Action</th>
+    </tr>
+    <tr>
+      <td><span>Minor</span></td>
+      <td><input type="number" min="0" max="100" class="custom-grade-input" value="" placeholder="Grade"></td>
+      <td class="weightage-text">40</td> <!-- Hard-coded weightage -->
+      <td class="weightedGrade">0.00</td>
+      <td><button onclick="removeRow(this)">Remove</button></td>
+    </tr>
+  </table>
+
+  <div class="button-container">
+    <button onclick="addMajor()">New Major</button>
+    <button onclick="addMinor()">New Minor</button>
+    <button onclick="calculateGrade()">Calculate</button>
+  </div>
+
+  <div class="final-grade-container">
+    <p>Final Grade: <span id="finalGrade">0.00</span></p>
+    <button id="themeToggle" onclick="toggleTheme()">Toggle Dark/Light Mode</button>
+  </div>
+
+  <script>
+    function addMajor() {
+      const table = document.getElementById("gradeTable");
+      const newRow = table.insertRow(-1);
+      newRow.classList.add("fade-in");
+      newRow.innerHTML = `
+        <td><span>Major</span></td>
+        <td><input type="number" min="0" max="100" class="custom-grade-input" value="" placeholder="Grade"></td>
+        <td class="weightage-text">60</td> <!-- Hard-coded weightage -->
+        <td class="weightedGrade">0.00</td>
+        <td><button onclick="removeRow(this)">Remove</button></td>
+      `;
+
+      // Trigger the fade-in animation
+      requestAnimationFrame(() => {
+        newRow.classList.add("show");
+      });
+    }
+
+    function addMinor() {
+      const table = document.getElementById("gradeTable");
+      const newRow = table.insertRow(-1);
+      newRow.classList.add("fade-in");
+      newRow.innerHTML = `
+        <td><span>Minor</span></td>
+        <td><input type="number" min="0" max="100" class="custom-grade-input" value="" placeholder="Grade"></td>
+        <td class="weightage-text">40</td> <!-- Hard-coded weightage -->
+        <td class="weightedGrade">0.00</td>
+        <td><button onclick="removeRow(this)">Remove</button></td>
+      `;
+
+      // Trigger the fade-in animation
+      requestAnimationFrame(() => {
+        newRow.classList.add("show");
+      });
+    }
+
+    function removeRow(button) {
+      const row = button.parentElement.parentElement; // Get the row of the button
+      row.parentElement.removeChild(row); // Remove the row from the table
+      calculateGrade(); // Recalculate the final grade after removing a row
+    }
+
+    function calculateGrade() {
+      const rows = document.querySelectorAll("#gradeTable tr:not(:first-child)");
+      let totalWeightedGrade = 0;
+      let totalWeightage = 0;
+
+      rows.forEach(row => {
+        const gradeInput = row.cells[1].querySelector("input").value;
+        const weightage = parseFloat(row.cells[2].textContent) / 100; // Get hard-coded weightage
+
+        const grade = parseFloat(gradeInput);
+
+        if (!isNaN(grade) && gradeInput !== '' && !isNaN(weightage)) {
+          const weightedGrade = grade * weightage;
+          row.cells[3].textContent = weightedGrade.toFixed(2);
+          totalWeightedGrade += weightedGrade;
+          totalWeightage += weightage;
+        } else {
+          row.cells[3].textContent = '0.00';
+        }
+      });
+
+      const finalGrade = totalWeightage > 0 ? totalWeightedGrade / totalWeightage : 0;
+      document.getElementById("finalGrade").textContent = finalGrade.toFixed(2);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      document.body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --table-background: #f0f0f0;
+  --table-border: #cccccc;
+  --button-background: #7289da;
+  --button-text: #ffffff;
+  --button-hover: #5b6eae;
+  --shadow-light: 0 4px 10px rgba(0, 0, 0, 0.2); /* Dark shadow for light mode */
+}
+
+[data-theme='dark'] {
+  --background-color: #36393f;
+  --text-color: #ffffff;
+  --table-background: #2f3136;
+  --table-border: #444444;
+  --button-background: #7289da;
+  --button-text: #ffffff;
+  --button-hover: #5b6eae;
+  --shadow-dark: 0 4px 10px rgba(255, 255, 255, 0.1); /* Dark gray shadow for dark mode */
+}
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--table-background);
+  border: 1px solid var(--table-border);
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: var(--shadow-light); /* Default shadow */
+  overflow: hidden; /* Ensures rounded corners are applied */
+}
+
+[data-theme='dark'] table {
+  box-shadow: var(--shadow-dark); /* Shadow for dark mode */
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid var(--table-border);
+}
+
+input[type="number"] {
+  width: 50px;
+}
+
+button {
+  margin: 5px;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+#themeToggle {
+  margin-top: 20px;
+}
