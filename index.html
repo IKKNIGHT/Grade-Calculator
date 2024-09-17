@@ -126,26 +126,29 @@
 
     function calculateGrade() {
       const rows = document.querySelectorAll("#gradeTable tr:not(:first-child)");
-      let totalWeightedGrade = 0;
-      let totalWeightage = 0;
+      let totalMinorGrade = 0;
+      let totalMajorGrade = 0;
+      let minorCount = 0;
+      let majorCount = 0;
 
       rows.forEach(row => {
         const gradeInput = row.cells[1].querySelector("input").value;
-        const weightage = parseFloat(row.cells[2].textContent) / 100; // Get hard-coded weightage
-
         const grade = parseFloat(gradeInput);
 
-        if (!isNaN(grade) && gradeInput !== '' && !isNaN(weightage)) {
-          const weightedGrade = grade * weightage;
-          row.cells[3].textContent = weightedGrade.toFixed(2);
-          totalWeightedGrade += weightedGrade;
-          totalWeightage += weightage;
-        } else {
-          row.cells[3].textContent = '0.00';
+        if (row.cells[0].innerText === 'Minor' && !isNaN(grade)) {
+          totalMinorGrade += grade;
+          minorCount++;
+        } else if (row.cells[0].innerText === 'Major' && !isNaN(grade)) {
+          totalMajorGrade += grade;
+          majorCount++;
         }
       });
 
-      const finalGrade = totalWeightage > 0 ? totalWeightedGrade / totalWeightage : 0;
+      const averageMinorGrade = minorCount > 0 ? totalMinorGrade / minorCount : 0;
+      const averageMajorGrade = majorCount > 0 ? totalMajorGrade / majorCount : 0;
+
+      // Calculate final grade based on the weighted averages
+      const finalGrade = (averageMinorGrade * 0.4) + (averageMajorGrade * 0.6);
       document.getElementById("finalGrade").textContent = finalGrade.toFixed(2);
     }
 
