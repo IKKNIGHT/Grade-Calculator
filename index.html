@@ -144,11 +144,18 @@
         }
       });
 
-      const averageMinorGrade = minorCount > 0 ? totalMinorGrade / minorCount : 0;
-      const averageMajorGrade = majorCount > 0 ? totalMajorGrade / majorCount : 0;
+      let finalGrade = 0;
 
-      // Calculate final grade based on the weighted averages
-      const finalGrade = (averageMinorGrade * 0.4) + (averageMajorGrade * 0.6);
+      if (minorCount > 0 && majorCount > 0) {
+        const averageMinorGrade = totalMinorGrade / minorCount;
+        const averageMajorGrade = totalMajorGrade / majorCount;
+        finalGrade = (averageMinorGrade * 0.4) + (averageMajorGrade * 0.6);
+      } else if (minorCount > 0) {
+        finalGrade = totalMinorGrade / minorCount; // Only minors
+      } else if (majorCount > 0) {
+        finalGrade = totalMajorGrade / majorCount; // Only majors
+      }
+
       document.getElementById("finalGrade").textContent = finalGrade.toFixed(2);
     }
 
